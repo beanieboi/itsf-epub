@@ -8,10 +8,12 @@
 }
 .section-title {
   display: block;
+  break-after: avoid;
   font-size: 1.375em;
   font-weight: bold;
   line-height: 1.2;
   margin: 1em 0 0.67em;
+  page-break-after: avoid;
 }
 .contents-list-ordered {
   display: block;
@@ -30,19 +32,25 @@
 }
 .subsection-title {
   display: block;
+  break-after: avoid;
   font-size: 1.25em;
   font-weight: normal;
   line-height: 1.2;
   margin: 1em 0 0.5em;
+  page-break-after: avoid;
 }
 .body-paragraph {
   display: block;
   margin: 1em 0;
+  orphans: 2;
+  widows: 2;
 }
 .list-paragraph {
   display: block;
-  text-indent: 1em;
-  margin: 1em 0;
+  margin: 0.45em 0 0.45em 1.5em;
+  orphans: 2;
+  text-indent: -1.1em;
+  widows: 2;
 }
 .defined-term {
   font-style: italic;
@@ -55,14 +63,19 @@
 }
 .nested-list-paragraph {
   display: block;
-  margin: 1em 0 1em 5em;
+  margin: 0.45em 0 0.45em 3em;
+  orphans: 2;
+  text-indent: -1.1em;
+  widows: 2;
 }
 .subsubsection-title {
   display: block;
+  break-after: avoid;
   font-size: 1.125em;
   font-weight: normal;
   line-height: 1.2;
   margin: 1em 0 0.5em;
+  page-break-after: avoid;
 }
 .table-row-artifact {
   display: block;
@@ -75,15 +88,21 @@
 }
 .continuation-indent {
   display: block;
-  margin: 1em 0 1em 3em;
+  margin: 0.45em 0 0.45em 3em;
 }
 .run-in-subheading {
+  break-after: avoid;
+  display: block;
   font-size: 1.125em;
   line-height: 1.2;
+  page-break-after: avoid;
 }
 .nested-bullet-paragraph {
   display: block;
-  margin: 1em 0 1em 7em;
+  margin: 0.45em 0 0.45em 4.5em;
+  orphans: 2;
+  text-indent: -1.1em;
+  widows: 2;
 }
 .wide-indent-artifact {
   display: block;
@@ -95,7 +114,7 @@
 }
 .deep-continuation-indent {
   display: block;
-  margin: 1em 0 1em 6em;
+  margin: 0.45em 0 0.45em 4.5em;
 }
 .cover-body {
   display: block;
@@ -176,12 +195,17 @@
 .rules-table th,
 .rules-table td {
   border: 1px solid #777;
+  line-height: 1.25;
   padding: 0.35em 0.5em;
   text-align: left;
   vertical-align: top;
 }
 .rules-table th {
   font-weight: bold;
+}
+.rules-table tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 .rules-table-duration-last th:last-child,
 .rules-table-duration-last td:last-child {
