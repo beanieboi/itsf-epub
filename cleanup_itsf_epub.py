@@ -711,9 +711,10 @@ def rewrite_opf(root: Path, chapters: list[dict[str, object]], logo: str) -> Non
         ET.SubElement(manifest, f"{{{OPF_NS}}}item", attrs)
     for item_id in ["titlepage", "contents"] + [f'section-{c["num"]}' for c in chapters]:
         ET.SubElement(spine, f"{{{OPF_NS}}}itemref", {"idref": item_id})
-    if guide is not None:
-        guide.clear()
-        ET.SubElement(guide, f"{{{OPF_NS}}}reference", {"type": "cover", "title": "Cover", "href": "titlepage.xhtml"})
+    if guide is None:
+        guide = ET.SubElement(package, f"{{{OPF_NS}}}guide")
+    guide.clear()
+    ET.SubElement(guide, f"{{{OPF_NS}}}reference", {"type": "text", "title": "Start", "href": "titlepage.xhtml"})
     tree.write(opf_path, encoding="utf-8", xml_declaration=True)
 
 

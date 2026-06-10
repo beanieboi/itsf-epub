@@ -59,4 +59,7 @@
     <itemref idref="section-17" />
     <itemref idref="section-18" />
   </spine>
+  <guide>
+    <reference type="text" title="Start" href="titlepage.xhtml" />
+  </guide>
   </package>
