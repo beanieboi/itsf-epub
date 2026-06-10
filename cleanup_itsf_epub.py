@@ -628,6 +628,9 @@ h3 {
   line-height: 1.2;
   margin: 1em 0 0.5em 0;
 }
+.definition-heading {
+  font-style: normal;
+}
 .toc-level-2 {
   margin-left: 1.5em;
 }
@@ -817,6 +820,20 @@ def apply_semantic_class_names(root: Path) -> None:
         write(css_path, css)
 
 
+def normalize_definition_headings(root: Path) -> None:
+    """Keep definition headwords bold but not italic in the definitions list."""
+    path = root / "02-definitions.xhtml"
+    if not path.exists():
+        return
+    text = read(path)
+    text = re.sub(
+        r'(<p class="body-paragraph">(?:<span id="[^"]+"></span>)+)<i class="defined-term"><b class="strong-text">([^<]+)</b></i>',
+        r'\1<b class="strong-text definition-heading">\2</b>',
+        text,
+    )
+    write(path, text)
+
+
 def package_epub(root: Path, output: Path) -> None:
     if output.exists():
         output.unlink()
@@ -843,6 +860,7 @@ def clean(input_epub: Path, output_epub: Path) -> None:
             normalize_time_management_table(root)
             ensure_table_css(root)
             apply_semantic_class_names(root)
+            normalize_definition_headings(root)
         else:
             logo = find_logo_image(root)
             remove_page_artifact_images(root, main_html)
@@ -860,6 +878,7 @@ def clean(input_epub: Path, output_epub: Path) -> None:
             remove_unmanifested(root)
             normalize_xhtml_validity(root)
             apply_semantic_class_names(root)
+            normalize_definition_headings(root)
         package_epub(root, output_epub)
 
 

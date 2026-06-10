@@ -50,6 +50,9 @@
 .strong-text {
   font-weight: bold;
 }
+.definition-heading {
+  font-style: normal;
+}
 .nested-list-paragraph {
   display: block;
   margin: 1em 0 1em 5em;
