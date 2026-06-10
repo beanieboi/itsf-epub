@@ -3,6 +3,7 @@ set shell := ["zsh", "-cu"]
 src := "src"
 epub := "Standard Matchplay Rules 2024 - ITSF.epub"
 cover_font := "/Library/Fonts/Arial Unicode.ttf"
+kindle_address := "KINDLE_EMAIL"
 
 default: epub
 
@@ -26,3 +27,6 @@ epub output=epub: cover-image
 
 validate output=epub: check-xhtml (epub output)
     epubcheck "{{output}}"
+
+mail-to-kindle output=epub: (epub output)
+    osascript -e 'set kindleAddress to "{{kindle_address}}"' -e 'set epubPath to POSIX file "{{justfile_directory()}}/{{output}}"' -e 'tell application "Mail"' -e 'set draft to make new outgoing message with properties {subject:"Standard Matchplay Rules 2024", visible:true}' -e 'tell draft' -e 'make new to recipient at end of to recipients with properties {address:kindleAddress}' -e 'tell content' -e 'make new attachment with properties {file name:epubPath} at after the last paragraph' -e 'end tell' -e 'end tell' -e 'activate' -e 'end tell'
