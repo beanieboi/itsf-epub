@@ -1,4 +1,4 @@
-.calibre {
+.book-body {
   display: block;
   font-size: 1em;
   line-height: 1.2;
@@ -6,95 +6,95 @@
   padding-right: 0;
   margin: 0 5pt;
 }
-.calibre1 {
+.section-title {
   display: block;
   font-size: 1.375em;
   font-weight: bold;
   line-height: 1.2;
   margin: 1em 0 0.67em;
 }
-.calibre2 {
+.contents-list-ordered {
   display: block;
   list-style-type: decimal;
   margin-bottom: 1em;
   margin-right: 0;
   margin-top: 1em;
 }
-.calibre3 {
+.contents-item {
   display: list-item;
 }
-.calibre4 {
+.spacer {
   display: block;
   text-align: center;
   margin: 1em 0;
 }
-.calibre5 {
+.subsection-title {
   display: block;
   font-size: 1.25em;
   font-weight: normal;
   line-height: 1.2;
   margin: 1em 0 0.5em;
 }
-.calibre6 {
+.body-paragraph {
   display: block;
   margin: 1em 0;
 }
-.calibre7 {
+.list-paragraph {
   display: block;
   text-indent: 1em;
   margin: 1em 0;
 }
-.calibre8 {
+.defined-term {
   font-style: italic;
 }
-.calibre9 {
+.strong-text {
   font-weight: bold;
 }
-.calibre10 {
+.nested-list-paragraph {
   display: block;
   margin: 1em 0 1em 5em;
 }
-.calibre11 {
+.subsubsection-title {
   display: block;
   font-size: 1.125em;
   font-weight: normal;
   line-height: 1.2;
   margin: 1em 0 0.5em;
 }
-.calibre12 {
+.table-row-artifact {
   display: block;
   margin: 1em 0 1em 1em;
 }
-.calibre13 {
+.table-header-continuation {
   display: block;
   text-align: right;
   margin: 1em 0;
 }
-.calibre14 {
+.continuation-indent {
   display: block;
   margin: 1em 0 1em 3em;
 }
-.calibre15 {
+.run-in-subheading {
   font-size: 1.125em;
   line-height: 1.2;
 }
-.calibre16 {
+.nested-bullet-paragraph {
   display: block;
   margin: 1em 0 1em 7em;
 }
-.calibre17 {
+.wide-indent-artifact {
   display: block;
   margin: 1em 0 1em 20em;
 }
-.calibre18 {
+.table-cell-continuation {
   display: block;
   margin: 1em 0 1em 10em;
 }
-.calibre19 {
+.deep-continuation-indent {
   display: block;
   margin: 1em 0 1em 6em;
 }
-.calibre20 {
+.cover-body {
   display: block;
   font-size: 1em;
   line-height: 1.2;
@@ -143,11 +143,11 @@
   text-align: center;
   margin: 1em 0;
 }
-.toc-level {
+.toc-level-2 {
   display: list-item;
   margin-left: 1.5em;
 }
-.toc-level1 {
+.toc-level-3 {
   display: list-item;
   margin-left: 3em;
 }
@@ -173,14 +173,14 @@
 .rules-table th {
   font-weight: bold;
 }
-.rules-table-narrow-last th:last-child,
-.rules-table-narrow-last td:last-child {
+.rules-table-duration-last th:last-child,
+.rules-table-duration-last td:last-child {
   text-align: center;
   white-space: nowrap;
   width: 5em;
 }
-.rules-table-narrow-limit th:nth-child(3),
-.rules-table-narrow-limit td:nth-child(3) {
+.rules-table-time-limit-column th:nth-child(3),
+.rules-table-time-limit-column td:nth-child(3) {
   text-align: center;
   white-space: nowrap;
   width: 5em;

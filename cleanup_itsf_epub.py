@@ -25,8 +25,33 @@ XHTML_DOCTYPE = (
     '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\n'
     '  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
 )
-
-
+CLASS_RENAMES = {
+    "calibre": "book-body",
+    "calibre1": "section-title",
+    "calibre2": "contents-list-ordered",
+    "calibre3": "contents-item",
+    "calibre4": "spacer",
+    "calibre5": "subsection-title",
+    "calibre6": "body-paragraph",
+    "calibre7": "list-paragraph",
+    "calibre8": "defined-term",
+    "calibre9": "strong-text",
+    "calibre10": "nested-list-paragraph",
+    "calibre11": "subsubsection-title",
+    "calibre12": "table-row-artifact",
+    "calibre13": "table-header-continuation",
+    "calibre14": "continuation-indent",
+    "calibre15": "run-in-subheading",
+    "calibre16": "nested-bullet-paragraph",
+    "calibre17": "wide-indent-artifact",
+    "calibre18": "table-cell-continuation",
+    "calibre19": "deep-continuation-indent",
+    "calibre20": "cover-body",
+    "rules-table-narrow-last": "rules-table-duration-last",
+    "rules-table-narrow-limit": "rules-table-time-limit-column",
+    "toc-level": "toc-level-2",
+    "toc-level1": "toc-level-3",
+}
 SECTION_FILES = {
     "1": "01-introduction.xhtml",
     "2": "02-definitions.xhtml",
@@ -309,7 +334,7 @@ def normalize_time_management_table(root: Path) -> None:
     if not path.exists():
         return
     text = read(path)
-    table = '''<table class="rules-table rules-table-narrow-last">
+    table = '''<table class="rules-table rules-table-duration-last">
   <caption>Table: Time management when putting the ball into play</caption>
   <thead>
     <tr>
@@ -434,7 +459,7 @@ def normalize_reflowed_tables(root: Path) -> None:
 <p class="calibre12"><i class="calibre8">Between points</i>    Goal scored that does not end the <i class="calibre8">game</i>               5 seconds</p>
 <p class="calibre12"><i class="calibre8">Between games</i>   Goal scored that ends the <i class="calibre8">game</i>                     90 seconds</p>
 <p class="calibre12"><i class="calibre8">Time-out</i>          Player calls a <i class="calibre8">time-out</i>                                30 seconds</p>''',
-                '''<table class="rules-table rules-table-narrow-last">
+                '''<table class="rules-table rules-table-duration-last">
   <caption>Table: Time management for <i class="calibre8">pauses</i></caption>
   <thead>
     <tr>
@@ -527,19 +552,19 @@ def ensure_table_css(root: Path) -> None:
   font-weight: bold;
 }
 """
-    if ".rules-table-narrow-last" not in css:
+    if ".rules-table-duration-last" not in css:
         css += """
-.rules-table-narrow-last th:last-child,
-.rules-table-narrow-last td:last-child {
+.rules-table-duration-last th:last-child,
+.rules-table-duration-last td:last-child {
   text-align: center;
   white-space: nowrap;
   width: 5em;
 }
 """
-    if ".rules-table-narrow-limit" not in css:
+    if ".rules-table-time-limit-column" not in css:
         css += """
-.rules-table-narrow-limit th:nth-child(3),
-.rules-table-narrow-limit td:nth-child(3) {
+.rules-table-time-limit-column th:nth-child(3),
+.rules-table-time-limit-column td:nth-child(3) {
   text-align: center;
   white-space: nowrap;
   width: 5em;
@@ -558,7 +583,7 @@ def create_cover(root: Path, logo: str) -> None:
   <link rel="stylesheet" type="text/css" href="stylesheet.css" />
   <link rel="stylesheet" type="text/css" href="page_styles.css" />
 </head>
-<body class="calibre cover-page">
+<body class="cover-body cover-page">
   <div class="cover-block">
     <img class="cover-logo" src="{escape(logo)}" alt="ITSF Rules of Table Soccer" />
     <h1 id="cover-title">ITSF Rules of Table Soccer</h1>
@@ -761,6 +786,27 @@ def normalize_xhtml_validity(root: Path) -> None:
         write(css_path, css)
 
 
+def apply_semantic_class_names(root: Path) -> None:
+    """Replace Calibre-generated class tokens with document-oriented names."""
+
+    def repl(match: re.Match[str]) -> str:
+        tokens = match.group(1).split()
+        renamed = [CLASS_RENAMES.get(token, token) for token in tokens]
+        return 'class="' + " ".join(renamed) + '"'
+
+    for path in sorted(root.glob("*.xhtml")):
+        text = read(path)
+        text = re.sub(r'class="([^"]+)"', repl, text)
+        write(path, text)
+
+    css_path = root / "stylesheet.css"
+    if css_path.exists():
+        css = read(css_path)
+        for old, new in sorted(CLASS_RENAMES.items(), key=lambda item: len(item[0]), reverse=True):
+            css = re.sub(rf"(?<=\.){re.escape(old)}\b", new, css)
+        write(css_path, css)
+
+
 def package_epub(root: Path, output: Path) -> None:
     if output.exists():
         output.unlink()
@@ -786,6 +832,7 @@ def clean(input_epub: Path, output_epub: Path) -> None:
             normalize_reflowed_tables(root)
             normalize_time_management_table(root)
             ensure_table_css(root)
+            apply_semantic_class_names(root)
         else:
             logo = find_logo_image(root)
             remove_page_artifact_images(root, main_html)
@@ -802,6 +849,7 @@ def clean(input_epub: Path, output_epub: Path) -> None:
             write_ncx(root, outline)
             remove_unmanifested(root)
             normalize_xhtml_validity(root)
+            apply_semantic_class_names(root)
         package_epub(root, output_epub)
 
 
