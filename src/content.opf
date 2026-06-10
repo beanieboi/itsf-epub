@@ -9,8 +9,10 @@
     <meta refines="#id-1" property="role" scheme="marc:relators">aut</meta>
     <meta refines="#id-1" property="file-as">ITSF</meta>
     <meta property="dcterms:modified" scheme="dcterms:W3CDTF">2026-06-10T12:14:54Z</meta>
+    <meta name="cover" content="cover-image" />
   <dc:date>2023-12-01</dc:date></metadata>
   <manifest>
+    <item id="cover-image" href="cover.png" media-type="image/png" properties="cover-image" />
     <item id="titlepage" href="titlepage.xhtml" media-type="application/xhtml+xml" />
     <item id="contents" href="contents.xhtml" media-type="application/xhtml+xml" />
     <item id="section-1" href="01-introduction.xhtml" media-type="application/xhtml+xml" />

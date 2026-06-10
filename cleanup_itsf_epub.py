@@ -679,11 +679,17 @@ def rewrite_opf(root: Path, chapters: list[dict[str, object]], logo: str) -> Non
     opf_path = root / "content.opf"
     tree = ET.parse(opf_path)
     package = tree.getroot()
+    metadata = package.find(f"{{{OPF_NS}}}metadata")
     manifest = package.find(f"{{{OPF_NS}}}manifest")
     spine = package.find(f"{{{OPF_NS}}}spine")
     guide = package.find(f"{{{OPF_NS}}}guide")
     if manifest is None or spine is None:
         raise SystemExit("Invalid OPF: missing manifest or spine")
+    if metadata is not None:
+        for meta in list(metadata):
+            if meta.tag == f"{{{OPF_NS}}}meta" and meta.get("name") == "cover":
+                metadata.remove(meta)
+        ET.SubElement(metadata, f"{{{OPF_NS}}}meta", {"name": "cover", "content": "cover"})
     manifest.clear()
     spine.clear()
     spine.set("toc", "ncx")
@@ -699,7 +705,10 @@ def rewrite_opf(root: Path, chapters: list[dict[str, object]], logo: str) -> Non
         ("cover", logo, "image/png"),
     ]
     for item_id, href, media_type in items:
-        ET.SubElement(manifest, f"{{{OPF_NS}}}item", {"id": item_id, "href": href, "media-type": media_type})
+        attrs = {"id": item_id, "href": href, "media-type": media_type}
+        if item_id == "cover":
+            attrs["properties"] = "cover-image"
+        ET.SubElement(manifest, f"{{{OPF_NS}}}item", attrs)
     for item_id in ["titlepage", "contents"] + [f'section-{c["num"]}' for c in chapters]:
         ET.SubElement(spine, f"{{{OPF_NS}}}itemref", {"idref": item_id})
     if guide is not None:
