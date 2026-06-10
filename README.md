@@ -107,20 +107,40 @@ The curated EPUB contains:
 `content.opf` declares `cover.png` as the cover image and points the Kindle
 start location at `titlepage.xhtml`.
 
-## Tooling
+## External Dependencies
 
-Required tools:
+Required for normal editing and validation:
 
-- Calibre's `ebook-convert`
+- `just` - runs the project recipes in `Justfile`
 - `uv`
-- `xmllint`
+- `xmllint` - provided by libxml2; used for XHTML formatting and checks
 - `zip` / `unzip`
 - ImageMagick `magick`
 - `epubcheck`
+- Arial Unicode font at `/Library/Fonts/Arial Unicode.ttf`, used when
+  regenerating `src/cover.png`
 
-Useful manual tool:
+Optional workflow tools:
 
-- Sigil
+- Calibre's `ebook-convert` - required only for `just validate-cleaned-epub`
+  and other PDF regeneration work
+- Apple Mail and macOS `osascript` - required only for `just mail-to-kindle`
+- Sigil - useful for manual EPUB inspection
+
+On macOS with Homebrew, the command-line dependencies can be installed with:
+
+```sh
+brew install just uv imagemagick epubcheck
+```
+
+`xmllint`, `zip`, `unzip` and `osascript` are normally present on macOS. If
+`xmllint` is missing, install libxml2:
+
+```sh
+brew install libxml2
+```
+
+For PDF regeneration, install Calibre and ensure `ebook-convert` is on `PATH`.
 
 ## Commit Policy
 
