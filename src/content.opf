@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" version="3.0" unique-identifier="bookid">
+  <metadata>
+    <dc:identifier id="bookid">urn:uuid:aeaee1e1-e23e-4fe7-9913-458b3a4d9127</dc:identifier><dc:title id="id">Standard Matchplay Rules 2024</dc:title>
+    <dc:creator id="id-1">ITSF</dc:creator>
+    <dc:language>en</dc:language>
+    <meta refines="#id" property="title-type">main</meta>
+    <meta refines="#id" property="file-as">Standard Matchplay Rules 2024</meta>
+    <meta refines="#id-1" property="role" scheme="marc:relators">aut</meta>
+    <meta refines="#id-1" property="file-as">ITSF</meta>
+    <meta property="dcterms:modified" scheme="dcterms:W3CDTF">2026-06-10T12:14:54Z</meta>
+  <dc:date>2023-12-01</dc:date></metadata>
+  <manifest>
+    <item id="titlepage" href="titlepage.xhtml" media-type="application/xhtml+xml" />
+    <item id="contents" href="contents.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-1" href="01-introduction.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-2" href="02-definitions.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-3" href="03-match-structure.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-4" href="04-prelude.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-5" href="05-putting-ball-into-play.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-6" href="06-possession.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-7" href="07-breaks-in-play.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-8" href="08-time-control.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-9" href="09-referee.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-10" href="10-spinning.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-11" href="11-passing.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-12" href="12-wall-contact.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-13" href="13-reaching-into-playing-area.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-14" href="14-switching-positions.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-15" href="15-impairing-play.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-16" href="16-changes-to-table.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-17" href="17-penalty-shot.xhtml" media-type="application/xhtml+xml" />
+    <item id="section-18" href="18-penalties.xhtml" media-type="application/xhtml+xml" />
+    <item id="page_css" href="page_styles.css" media-type="text/css" />
+    <item id="css" href="stylesheet.css" media-type="text/css" />
+    <item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav" />
+  </manifest>
+  <spine>
+    <itemref idref="titlepage" />
+    <itemref idref="contents" />
+    <itemref idref="section-1" />
+    <itemref idref="section-2" />
+    <itemref idref="section-3" />
+    <itemref idref="section-4" />
+    <itemref idref="section-5" />
+    <itemref idref="section-6" />
+    <itemref idref="section-7" />
+    <itemref idref="section-8" />
+    <itemref idref="section-9" />
+    <itemref idref="section-10" />
+    <itemref idref="section-11" />
+    <itemref idref="section-12" />
+    <itemref idref="section-13" />
+    <itemref idref="section-14" />
+    <itemref idref="section-15" />
+    <itemref idref="section-16" />
+    <itemref idref="section-17" />
+    <itemref idref="section-18" />
+  </spine>
+  </package>
