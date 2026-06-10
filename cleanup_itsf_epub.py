@@ -21,10 +21,7 @@ from xml.etree import ElementTree as ET
 
 OPF_NS = "http://www.idpf.org/2007/opf"
 DC_NS = "http://purl.org/dc/elements/1.1/"
-XHTML_DOCTYPE = (
-    '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\n'
-    '  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
-)
+XHTML_DOCTYPE = "<!DOCTYPE html>"
 CLASS_RENAMES = {
     "calibre": "book-body",
     "calibre1": "section-title",
@@ -760,8 +757,11 @@ def normalize_xhtml_validity(root: Path) -> None:
     for path in sorted(root.glob("*.xhtml")):
         text = read(path)
         text = text.replace("<?xml version='1.0' encoding='utf-8'?>", '<?xml version="1.0" encoding="utf-8"?>')
+        text = re.sub(r"\n?<!DOCTYPE[^>]*>(?:\n\s*\"[^\"]*\">)?", "", text, count=1)
         if "<!DOCTYPE" not in text[:300]:
             text = text.replace('<?xml version="1.0" encoding="utf-8"?>', '<?xml version="1.0" encoding="utf-8"?>\n' + XHTML_DOCTYPE, 1)
+        text = re.sub(r'\n\s*<meta http-equiv="Content-Type" content="text/html; charset=utf-8"\s*/>', "", text)
+        text = re.sub(r'<span([^>]*)/>', r'<span\1></span>', text)
         text = re.sub(
             r'<html xmlns="http://www\.w3\.org/1999/xhtml">',
             '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">',

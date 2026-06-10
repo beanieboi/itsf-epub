@@ -7,9 +7,11 @@ default: epub
 
 check-xhtml:
     xmllint --nonet --noout "{{src}}"/*.xhtml
+    python3 scripts/sigil_compat.py --check "{{src}}"
 
 format-xhtml:
     for file in "{{src}}"/*.xhtml; do xmllint --nonet --format "$file" > "$file.tmp" && mv "$file.tmp" "$file"; done
+    python3 scripts/sigil_compat.py --fix "{{src}}"
 
 epub output=epub:
     test -f "{{src}}/mimetype"
