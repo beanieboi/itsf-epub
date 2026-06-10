@@ -27,7 +27,7 @@ just validate
 `just validate` performs:
 
 1. XHTML well-formedness checks with `xmllint`
-2. Sigil compatibility checks with `scripts/sigil_compat.py`
+2. Sigil compatibility checks with `sigil_compat.py`
 3. cover image regeneration
 4. EPUB packaging from `src/`
 5. EPUBCheck validation
@@ -149,7 +149,7 @@ Commit maintained sources and workflow files:
 - `src/`
 - `Justfile`
 - `cleanup_itsf_epub.py`
-- `scripts/`
+- `sigil_compat.py`
 - documentation
 
 Do not commit generated EPUB files or `build/` outputs.

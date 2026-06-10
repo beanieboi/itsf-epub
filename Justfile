@@ -11,11 +11,11 @@ default: epub
 
 check-xhtml:
     xmllint --nonet --noout "{{src}}"/*.xhtml
-    uv run --no-cache python scripts/sigil_compat.py --check "{{src}}"
+    uv run --no-cache python sigil_compat.py --check "{{src}}"
 
 format-xhtml:
     for file in "{{src}}"/*.xhtml; do xmllint --nonet --format "$file" > "$file.tmp" && mv "$file.tmp" "$file"; done
-    uv run --no-cache python scripts/sigil_compat.py --fix "{{src}}"
+    uv run --no-cache python sigil_compat.py --fix "{{src}}"
 
 calibre-epub output=calibre_epub:
     mkdir -p build
