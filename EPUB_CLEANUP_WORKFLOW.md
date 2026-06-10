@@ -4,9 +4,12 @@ This documents the cleanup we applied to the Calibre-generated EPUB for
 `Standard Matchplay Rules 2024 - ITSF.epub`, so the process can be repeated
 after regenerating an EPUB from a newer PDF.
 
-The current best output from this session is:
+The maintained source of truth is the unpacked EPUB tree in `src/`. Generated
+EPUB files are ignored by Git.
 
-`Standard Matchplay Rules 2024 - ITSF.structured-v5.epub`
+The normal generated output is:
+
+`Standard Matchplay Rules 2024 - ITSF.epub`
 
 It passes `epubcheck` with zero errors and zero warnings.
 
@@ -16,29 +19,72 @@ Required:
 
 - Calibre, to convert the source PDF to EPUB.
 - `zip` / `unzip`.
-- `python3`.
+- `uv`, to run Python scripts.
 - `epubcheck`.
 
 Useful manual check:
 
 - Sigil.
 
-## One-Command Cleanup
+## Current Justfile Workflow
+
+Build the curated EPUB from `src/`:
+
+```sh
+just epub
+```
+
+Validate the curated EPUB:
+
+```sh
+just validate
+```
+
+Open a Mail draft to the Kindle address with the generated EPUB attached:
+
+```sh
+just mail-to-kindle
+```
+
+Regenerate the intermediate Calibre EPUB from the checked-in PDF:
+
+```sh
+just calibre-epub
+```
+
+Run the full PDF-to-cleaned-EPUB path and validate the result:
+
+```sh
+just validate-cleaned-epub
+```
+
+That command performs:
+
+```text
+Standard Matchplay Rules 2024 - ITSF.pdf
+  -> build/Standard Matchplay Rules 2024 - ITSF.calibre.epub
+  -> build/Standard Matchplay Rules 2024 - ITSF.cleaned.epub
+  -> epubcheck
+```
+
+The `build/` directory is generated and ignored by Git.
+
+## Manual Cleanup Command
 
 After creating a fresh EPUB from the PDF, run:
 
 ```sh
-python3 cleanup_itsf_epub.py \
-  "Standard Matchplay Rules 2024 - ITSF.epub" \
-  "Standard Matchplay Rules 2024 - ITSF.cleaned.epub"
+uv run --no-cache python cleanup_itsf_epub.py \
+  "build/Standard Matchplay Rules 2024 - ITSF.calibre.epub" \
+  "build/Standard Matchplay Rules 2024 - ITSF.cleaned.epub"
 ```
 
 Then validate:
 
 ```sh
-epubcheck "Standard Matchplay Rules 2024 - ITSF.cleaned.epub"
-unzip -t "Standard Matchplay Rules 2024 - ITSF.cleaned.epub"
-ebook-convert "Standard Matchplay Rules 2024 - ITSF.cleaned.epub" /private/tmp/itsf-cleaned.txt
+epubcheck "build/Standard Matchplay Rules 2024 - ITSF.cleaned.epub"
+unzip -t "build/Standard Matchplay Rules 2024 - ITSF.cleaned.epub"
+ebook-convert "build/Standard Matchplay Rules 2024 - ITSF.cleaned.epub" /private/tmp/itsf-cleaned.txt
 ```
 
 The script is intentionally specific to the current Calibre/PDF reflow output

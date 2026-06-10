@@ -702,6 +702,7 @@ def rewrite_opf(root: Path, chapters: list[dict[str, object]], logo: str) -> Non
     ]
     items += [(f'section-{c["num"]}', str(c["file"]), "application/xhtml+xml") for c in chapters]
     items += [
+        ("nav", "nav.xhtml", "application/xhtml+xml"),
         ("page_css", "page_styles.css", "text/css"),
         ("css", "stylesheet.css", "text/css"),
         ("ncx", "toc.ncx", "application/x-dtbncx+xml"),
@@ -711,6 +712,8 @@ def rewrite_opf(root: Path, chapters: list[dict[str, object]], logo: str) -> Non
         attrs = {"id": item_id, "href": href, "media-type": media_type}
         if item_id == "cover":
             attrs["properties"] = "cover-image"
+        elif item_id == "nav":
+            attrs["properties"] = "nav"
         ET.SubElement(manifest, f"{{{OPF_NS}}}item", attrs)
     for item_id in ["titlepage", "contents"] + [f'section-{c["num"]}' for c in chapters]:
         ET.SubElement(spine, f"{{{OPF_NS}}}itemref", {"idref": item_id})
@@ -721,11 +724,62 @@ def rewrite_opf(root: Path, chapters: list[dict[str, object]], logo: str) -> Non
     tree.write(opf_path, encoding="utf-8", xml_declaration=True)
 
 
+def opf_identifier(root: Path) -> str:
+    opf_path = root / "content.opf"
+    tree = ET.parse(opf_path)
+    package = tree.getroot()
+    unique_id = package.get("unique-identifier")
+    metadata = package.find(f"{{{OPF_NS}}}metadata")
+    if metadata is not None and unique_id:
+        for identifier in metadata.findall(f"{{{DC_NS}}}identifier"):
+            if identifier.get("id") == unique_id and identifier.text:
+                return identifier.text
+    if metadata is not None:
+        identifier = metadata.find(f"{{{DC_NS}}}identifier")
+        if identifier is not None and identifier.text:
+            return identifier.text
+    return "b6afe5d3-8519-498f-8206-7583056261dc"
+
+
+def write_nav(root: Path, outline: list[tuple[int, str, str, str]]) -> None:
+    lines = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        XHTML_DOCTYPE,
+        '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">',
+        "<head>",
+        "  <title>Navigation</title>",
+        "</head>",
+        "<body>",
+        '  <nav epub:type="toc">',
+        "    <ol>",
+        '      <li><a href="contents.xhtml">Contents</a></li>',
+    ]
+    for _level, title, filename, anchor in outline:
+        lines.append(f'      <li><a href="{filename}#{anchor}">{escape(title)}</a></li>')
+    lines.extend(
+        [
+            "    </ol>",
+            "  </nav>",
+            '  <nav epub:type="landmarks" hidden="hidden">',
+            "    <h2>Landmarks</h2>",
+            "    <ol>",
+            '      <li><a epub:type="bodymatter" href="titlepage.xhtml">Start</a></li>',
+            '      <li><a epub:type="toc" href="contents.xhtml">Contents</a></li>',
+            "    </ol>",
+            "  </nav>",
+            "</body>",
+            "</html>",
+            "",
+        ]
+    )
+    write(root / "nav.xhtml", "\n".join(lines))
+
+
 def write_ncx(root: Path, outline: list[tuple[int, str, str, str]]) -> None:
     ncx = ET.Element("ncx", {"xmlns": "http://www.daisy.org/z3986/2005/ncx/", "version": "2005-1", "{http://www.w3.org/XML/1998/namespace}lang": "eng"})
     head = ET.SubElement(ncx, "head")
     for name, content in [
-        ("dtb:uid", "b6afe5d3-8519-498f-8206-7583056261dc"),
+        ("dtb:uid", opf_identifier(root)),
         ("dtb:depth", "3"),
         ("dtb:generator", "cleanup_itsf_epub.py"),
         ("dtb:totalPageCount", "0"),
@@ -755,7 +809,7 @@ def write_ncx(root: Path, outline: list[tuple[int, str, str, str]]) -> None:
 
 
 def remove_unmanifested(root: Path) -> None:
-    keep = {"mimetype", "content.opf", "toc.ncx", "stylesheet.css", "page_styles.css", "index-1_1.png", "titlepage.xhtml", "contents.xhtml", "META-INF"}
+    keep = {"mimetype", "content.opf", "toc.ncx", "nav.xhtml", "stylesheet.css", "page_styles.css", "index-1_1.png", "titlepage.xhtml", "contents.xhtml", "META-INF"}
     keep.update(SECTION_FILES.values())
     for path in root.iterdir():
         if path.name not in keep:
@@ -874,6 +928,7 @@ def clean(input_epub: Path, output_epub: Path) -> None:
             append_css(root)
             ensure_table_css(root)
             rewrite_opf(root, chapters, logo)
+            write_nav(root, outline)
             write_ncx(root, outline)
             remove_unmanifested(root)
             normalize_xhtml_validity(root)
